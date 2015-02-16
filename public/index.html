@@ -1,0 +1,40 @@
+<html>
+<head>
+    <title>Sample editor</title>
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <link rel="stylesheet" href="css/codemirror.css"> 
+    <link rel="stylesheet" href="css/jasmine.css"> 
+    <script src="scripts/codemirror.js"></script>
+    <script src="scripts/typescriptServices.js"></script>
+    <script src="scripts/jasmine.js"></script>
+    <script src="scripts/jasmine-html.js"></script>
+    <script src="scripts/boot.js"></script>
+
+    <style>
+        body {
+            font-family: verdana;
+        }
+        .editor {
+            border: 1px solid black;
+            width: 1000px;
+            height: 400px;
+            margin: 25px;
+        }
+    </style>
+
+    <script>
+    var myEditor;
+    window.addEventListener('load', function(){
+        var editorDiv = document.getElementById('editor');
+        myEditor = CodeMirror(editorDiv, {
+            value: "function myScript(){return 100;}\n",
+            mode:  "javascript"
+        });
+    });
+    </script>
+</head>
+<body>
+    <h2>Sample editor</h2>
+    <div id='editor' class='editor'></div>
+</body>
+</html>
