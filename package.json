@@ -16,9 +16,7 @@
   ],
   "author": "Bill Ticehurst",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/billti/test/issues"
-  },
+  "bugs": "https://github.com/billti/test/issues",
   "homepage": "https://github.com/billti/test",
   "dependencies": {
     "http-server": "^0.7.4"

@@ -1,6 +1,11 @@
 # Test repository
 ### By Bill Ticehurst
 
+Install bower and grunt-cli globally (npm install -g *) to use this repository, then "npm install" and "bower install" 
+to download the dependencies.
+
+Build the site by running "grunt".  Launch it with "npm start".
+
 ## Summary
 This is my test repository that exists purely for random experiments.
 
