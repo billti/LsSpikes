@@ -9,6 +9,12 @@ module.exports = function(grunt){
 					src: 'bower_components/codemirror/lib/codemirror.css',
 					dest: 'public/css/codemirror.css'
 				}, {
+					src: 'bower_components/codemirror/addon/hint/show-hint.js',
+					dest: 'public/scripts/show-hint.js'
+				}, {
+					src: 'bower_components/codemirror/addon/hint/show-hint.css',
+					dest: 'public/css/show-hint.css'
+				}, {
 					src: 'bower_components/typescriptServices/index.js',
 					dest: 'public/scripts/typescriptServices.js'
 				}, {

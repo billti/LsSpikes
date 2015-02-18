@@ -19,3 +19,12 @@ CodeMirror.defineMode("typescript", function(config, modeConfig) {
 	};
 	return modeObject;
 });
+
+CodeMirror.registerHelper("hint", "typescript", function(editor, options){
+	var cur = editor.getCursor();
+	var token = editor.getTokenAt(cur);
+
+	return {list: ["sausages","eggs","beans","tea","toast"],
+            from: CodeMirror.Pos(cur.line, token.start),
+            to: CodeMirror.Pos(cur.line, token.end)};
+});

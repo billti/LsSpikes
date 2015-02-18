@@ -3,8 +3,10 @@
     <title>Sample editor</title>
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
     <link rel="stylesheet" href="css/codemirror.css"> 
+    <link rel="stylesheet" href="css/show-hint.css"> 
     <link rel="stylesheet" href="css/jasmine.css"> 
     <script src="scripts/codemirror.js"></script>
+    <script src="scripts/show-hint.js"></script>
     <script src="app/typescriptMode.js"></script>
     <script src="scripts/typescriptServices.js"></script>
     <script src="scripts/d3.js"></script>
@@ -30,7 +32,9 @@
         var editorDiv = document.getElementById('editor');
         myEditor = CodeMirror(editorDiv, {
             value: "function myScript () { return 100 ; }\n",
-            mode:  "typescript"
+            mode:  "typescript",
+            extraKeys: {"Ctrl-Space": "autocomplete"},
+            lineNumbers: true
         });
     });
     </script>
