@@ -23,6 +23,9 @@ module.exports = function(grunt){
 				}, {
 					src: 'bower_components/jasmine/lib/jasmine-core/boot.js',
 					dest: 'public/scripts/boot.js'
+				}, {
+					src: 'bower_components/d3/d3.js',
+					dest: 'public/scripts/d3.js'
 				}]			
 			}
 		}

@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "typescriptServices.d": "https://raw.githubusercontent.com/Microsoft/TypeScript/master/bin/typescriptServices.d.ts",
-    "jasmine": "~2.2.1"
+    "jasmine": "~2.2.1",
+    "d3": "~3.5.5"
   }
 }
