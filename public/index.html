@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="css/codemirror.css"> 
     <link rel="stylesheet" href="css/jasmine.css"> 
     <script src="scripts/codemirror.js"></script>
+    <script src="app/typescriptMode.js"></script>
     <script src="scripts/typescriptServices.js"></script>
     <script src="scripts/d3.js"></script>
     <script src="scripts/jasmine.js"></script>
@@ -28,8 +29,8 @@
     window.addEventListener('load', function(){
         var editorDiv = document.getElementById('editor');
         myEditor = CodeMirror(editorDiv, {
-            value: "function myScript(){return 100;}\n",
-            mode:  "javascript"
+            value: "function myScript () { return 100 ; }\n",
+            mode:  "typescript"
         });
     });
     </script>
