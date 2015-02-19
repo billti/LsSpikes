@@ -1,15 +1,19 @@
 CodeMirror.defineMode("typescript", function(config, modeConfig) {
 	var classMapping = {
-		"keyword": "keyword",
-		"class name": "",
-		"punctuation": "punctuation",
 		"text": null,
+		"keyword": "keyword",
+		"punctuation": "punctuation",
 		"operator": "operator",
 		"number": "number",
 		"string": "string",
 		"interface name": "variable",
-		"parameter name": "variable"
+		"type parameter name": "meta",
+		"comment": "comment",
+		"class name": "def",
+		"module name": "def",
+		"enum name": "def"
 	};
+
 	var modeObject = {
 		startState: function(){
 			return { lastToken: "SOF", currLine: -1};
@@ -139,7 +143,5 @@ tsls.bindEditor = function(editor){
 }
 
 /* TODO
-1. Wire up the editor change events to update the document.
-2. Wire up the typescript mode token function to use the syntactic classifications.
-3. Encapsulate all this (and the script in index.html) nicely.
+Handle correct classification of multi-line tokens (e.g. comment headers)
 */
