@@ -47,7 +47,9 @@ CodeMirror.defineMode("typescript", function(config, modeConfig) {
 
 				// Advance past next token
 				stream.pos += nextToken.textSpan.start + nextToken.textSpan.length - index;
-				if(stream.pos > stream.string.length) stream.skipToEnd();
+				if(stream.pos > stream.string.length){
+					 stream.skipToEnd();
+				}
 
 				//console.log("From " + index + " to " + stream.pos + " found next token " + JSON.stringify(nextToken));
 				if(!(nextToken.classificationType in classMapping)){
@@ -115,10 +117,11 @@ tsls.updateDoc = function(docText){
 tsls.getNextClassification = function(index){
 	if(!tsls.classifications) return null;
 
-	// Assume the list is sorted, and find the first token that start on or after the index given
+	// Assume the list is sorted, and find the first token that ends on or after the index given
+	// Needs to end, and not start, after current point, due to multi-line tokens (e.g. comments)
 	var result = null;
 	tsls.classifications.some(function(elem){
-		if(elem.textSpan.start >= index){
+		if(elem.textSpan.start + elem.textSpan.length > index){
 			result = elem;
 			return true;
 		} else {
