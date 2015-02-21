@@ -9,6 +9,10 @@ declare function CodeMirror(callback: (host: HTMLElement) => void , options?: Co
 declare module CodeMirror {
     export var Pass: any;
 
+    export var defineMode: (name: string, mode: Function) => void;
+    export var registerHelper: (helperName: string, mode: string, hander: Function) => void;
+    export var Pos: any;
+
     function fromTextArea(host: HTMLTextAreaElement, options?: EditorConfiguration): CodeMirror.EditorFromTextArea;
 
     var version: string;
