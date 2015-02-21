@@ -87,11 +87,13 @@ module tsls {
     var docName = "sample.ts";
     var docText = "class Foo { public age = 42 }";
     var docVersion = "1";
-    var IScriptSnapshot = {
+
+    var IScriptSnapshot: ts.IScriptSnapshot = {
         getText: function (start, end) { return docText.substring(start, end); },
         getLength: function () { return docText.length; },
         getChangeRange: function () { return undefined; }
     };
+
     var host: ts.LanguageServiceHost = {
         getCompilationSettings: function () { return compilerOptions; },
         getNewLine: function () { return "\n"; },
@@ -100,11 +102,6 @@ module tsls {
         getScriptSnapshot: function (fileName) { return IScriptSnapshot; },
         getCurrentDirectory: function () { return "/"; },
         getDefaultLibFileName: function (options) { return "lib.d.ts"; },
-        //getLocalizedDiagnosticMessages?(): any;
-        //getCancellationToken?(): CancellationToken;
-        //log?(s: string): void;
-        //trace?(s: string): void;
-        //error?(s: string): void;
     };
 
     var docRegistry = ts.createDocumentRegistry();
@@ -112,21 +109,21 @@ module tsls {
     var service = ts.createLanguageService(host, docRegistry);
     var classifications: ts.ClassifiedSpan[];
 
-    var updateDoc = function (docText) {
+    var updateDoc = function (newText: string) {
         docVersion = (parseInt(docVersion) + 1).toString();
-        docText = docText;
+        docText = newText;
         docSourceFile = docRegistry.updateDocument(docSourceFile, docName, compilerOptions, IScriptSnapshot, docVersion, undefined);
 
         // classifications is an array of { classificationType: string; textSpan: {start: number; length: number;};}, using 0 based char offsets
         classifications = service.getSyntacticClassifications(docName, { start: 0, length: IScriptSnapshot.getLength() });
     };
 
-    function getNextClassification(index) {
+    function getNextClassification(index: number) {
         if (!classifications) return null;
 
         // Assume the list is sorted, and find the first token that ends on or after the index given
         // Needs to end, and not start, after current point, due to multi-line tokens (e.g. comments)
-        var result = null;
+        var result: ts.ClassifiedSpan = null;
         classifications.some(function (elem) {
             if (elem.textSpan.start + elem.textSpan.length > index) {
                 result = elem;
@@ -139,7 +136,7 @@ module tsls {
     }
 
     var indexFromPos: (line: number, ch: number) => number;
-    export function bindEditor(editor) {
+    export function bindEditor(editor: CodeMirror.Editor) {
         var doc = editor.getDoc();
         function onChange(editor, change) {
             // Don't worry about incremental for now.  Just do a full update
