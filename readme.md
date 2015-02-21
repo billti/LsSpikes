@@ -4,6 +4,8 @@
 Install bower and grunt-cli globally (npm install -g *) to use this repository, then "npm install" and "bower install" 
 to download the dependencies.
 
+This project also depends on having the TypeScript repository in a sibling folder.
+
 Build the site by running "grunt".  Launch it with "npm start".
 
 ## Summary

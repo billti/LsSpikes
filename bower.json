@@ -23,11 +23,9 @@
     "tests"
   ],
   "dependencies": {
-    "codemirror": "~4.12.0",
-    "typescriptServices": "https://raw.githubusercontent.com/Microsoft/TypeScript/master/bin/typescriptServices.js"
+    "codemirror": "~4.12.0"
   },
   "devDependencies": {
-    "typescriptServices.d": "https://raw.githubusercontent.com/Microsoft/TypeScript/master/bin/typescriptServices.d.ts",
     "jasmine": "~2.2.1",
     "d3": "~3.5.5"
   }

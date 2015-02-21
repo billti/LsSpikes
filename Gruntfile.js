@@ -15,8 +15,14 @@ module.exports = function(grunt){
 					src: 'bower_components/codemirror/addon/hint/show-hint.css',
 					dest: 'public/css/show-hint.css'
 				}, {
-					src: 'bower_components/typescriptServices/index.js',
+					src: '../typescript/built/local/typescriptServices.js',
 					dest: 'public/scripts/typescriptServices.js'
+				}, {
+					src: '../typescript/built/local/typescriptServices.d.ts',
+					dest: 'public/scripts/typescriptServices.d.ts'
+				}, {
+					src: '../typescript/built/local/lib.d.ts',
+					dest: 'public/scripts/lib.d.ts'
 				}, {
 					src: 'bower_components/jasmine/lib/jasmine-core/jasmine.css',
 					dest: 'public/css/jasmine.css'
