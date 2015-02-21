@@ -46,7 +46,7 @@ module tsls {
                     var nextToken = getNextClassification(index);
 
                     // Is the next token beyond this line?
-                    if (!nextToken || (nextToken && nextToken.textSpan.start > eolIndex)) {
+                    if (!nextToken || nextToken && nextToken.textSpan.start > eolIndex) {
                         stream.skipToEnd();
                         return null;
                     }
@@ -75,10 +75,13 @@ module tsls {
     CodeMirror.registerHelper("hint", "typescript", function (editor, options) {
         var cur = editor.getCursor();
         var token = editor.getTokenAt(cur);
+        var index = editor.indexFromPos(cur);
+
+        var entries = service.getCompletionsAtPosition(docName, index);
 
         return {
-            list: ["sausages", "eggs", "beans", "tea", "toast"],
-            from: CodeMirror.Pos(cur.line, token.start),
+            list: entries.entries.map( (elem) => elem.name),
+            from: CodeMirror.Pos(cur.line, token.start + 1),
             to: CodeMirror.Pos(cur.line, token.end)
         };
     });
@@ -88,24 +91,49 @@ module tsls {
     var docText = "class Foo { public age = 42 }";
     var docVersion = "1";
 
+    var defaultLibName = "/scripts/lib.d.ts"
+    var defaultLibText = "";
+
     var IScriptSnapshot: ts.IScriptSnapshot = {
         getText: function (start, end) { return docText.substring(start, end); },
         getLength: function () { return docText.length; },
         getChangeRange: function () { return undefined; }
     };
 
+    var libtsSnapshot: ts.IScriptSnapshot = {
+        getText: (start, end) => defaultLibText,
+        getLength: () => defaultLibText.length,
+        getChangeRange: () => undefined
+    }
+
     var host: ts.LanguageServiceHost = {
-        getCompilationSettings: function () { return compilerOptions; },
-        getNewLine: function () { return "\n"; },
-        getScriptFileNames: function () { return [docName]; },
-        getScriptVersion: function (fileName) { return docVersion; },
-        getScriptSnapshot: function (fileName) { return IScriptSnapshot; },
-        getCurrentDirectory: function () { return "/"; },
-        getDefaultLibFileName: function (options) { return "lib.d.ts"; },
+        getCompilationSettings: () => compilerOptions,
+        getNewLine: () => "\n",
+        getScriptFileNames: () => [defaultLibName, docName],
+        getScriptVersion: (fileName) => fileName === defaultLibName ? "1" : docVersion,
+        getScriptSnapshot: (fileName) => fileName === defaultLibName ? libtsSnapshot : IScriptSnapshot,
+        getCurrentDirectory: () => "/",
+        getDefaultLibFileName: () => defaultLibName
     };
 
     var docRegistry = ts.createDocumentRegistry();
     var docSourceFile = docRegistry.acquireDocument(docName, compilerOptions, IScriptSnapshot, docVersion);
+    var libtsFile: ts.SourceFile = undefined;
+
+    var libtsRequest = new XMLHttpRequest();
+    libtsRequest.onreadystatechange = function(){
+        if(libtsRequest.readyState === 4 /* done */){
+            if(libtsRequest.status === 200){
+                defaultLibText = libtsRequest.responseText;
+                libtsFile = docRegistry.acquireDocument(defaultLibName, compilerOptions, libtsSnapshot, "1");
+            } else {
+                throw "Failed to load lib.ts";
+            }
+        }
+    };
+    libtsRequest.open('get', defaultLibName, true);
+    libtsRequest.send();
+
     var service = ts.createLanguageService(host, docRegistry);
     var classifications: ts.ClassifiedSpan[];
 

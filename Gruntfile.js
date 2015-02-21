@@ -43,6 +43,7 @@ module.exports = function(grunt){
 		},
 		ts: {
 			options:{
+				compiler: '../TypeScript/built/local/tsc.js',
 				comments: true,
 				target: 'es5',
 				sourceMap: false
