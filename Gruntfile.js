@@ -40,10 +40,23 @@ module.exports = function(grunt){
 					dest: 'public/scripts/d3.js'
 				}]			
 			}
+		},
+		ts: {
+			options:{
+				comments: true,
+				target: 'es5',
+				sourceMap: false
+			},
+			default: {
+				src: ["src/**/*.ts"],
+				outDir: "public/scripts"
+			}
+
 		}
 	});
 
 	grunt.loadNpmTasks('grunt-contrib-copy');
+	grunt.loadNpmTasks('grunt-ts');
 
-	grunt.registerTask('default', ['copy']);
+	grunt.registerTask('default', ['copy', 'ts']);
 }
