@@ -72,18 +72,35 @@ module tsls {
         return modeObject;
     });
 
+    var elemTypeDOM;
+    var elemDescDOM;
+
     CodeMirror.registerHelper("hint", "typescript", function (editor, options) {
         var cur = editor.getCursor();
         var token = editor.getTokenAt(cur);
         var index = editor.indexFromPos(cur);
 
         var entries = service.getCompletionsAtPosition(docName, index);
-
-        return {
+        options.completeSingle = false;
+        var completions = {
             list: entries.entries.map( (elem) => elem.name),
-            from: CodeMirror.Pos(cur.line, token.start + 1),
+            from: CodeMirror.Pos(cur.line, token.string === "." ? token.start + 1 : token.start),
             to: CodeMirror.Pos(cur.line, token.end)
         };
+        CodeMirror.on(completions, 'select', (completion, elem) => {
+            var details = service.getCompletionEntryDetails(docName, index, completion);
+            // details.displayParts & display.documentation: Array<{kind: string, text: string>
+            var elemType = details.displayParts.reduce( (prev, curr) => { return prev + curr.text}, "");
+            var elemDesc = details.documentation.length > 0 ? details.documentation[0].text : completion;
+            elemTypeDOM.textContent = elemType;
+            elemDescDOM.textContent = elemDesc;
+        });
+        CodeMirror.on(completions, 'close', () => {
+            elemTypeDOM.textContent = "";
+            elemDescDOM.textContent = "";
+        });
+
+        return completions;
     });
 
     var compilerOptions = ts.getDefaultCompilerOptions();
@@ -165,6 +182,8 @@ module tsls {
 
     var indexFromPos: (line: number, ch: number) => number;
     export function bindEditor(editor: CodeMirror.Editor) {
+        elemTypeDOM = document.getElementById('elemType');
+        elemDescDOM = document.getElementById('elemDesc');
         var doc = editor.getDoc();
         function onChange(editor, change) {
             // Don't worry about incremental for now.  Just do a full update
