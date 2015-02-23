@@ -15,13 +15,13 @@ module.exports = function(grunt){
 					src: 'bower_components/codemirror/addon/hint/show-hint.css',
 					dest: 'public/css/show-hint.css'
 				}, {
-					src: '../typescript/built/local/typescriptServices.js',
+					src: 'TypeScript/built/local/typescriptServices.js',
 					dest: 'public/scripts/typescriptServices.js'
 				}, {
-					src: '../typescript/built/local/typescriptServices.d.ts',
+					src: 'TypeScript/built/local/typescriptServices.d.ts',
 					dest: 'public/scripts/typescriptServices.d.ts'
 				}, {
-					src: '../typescript/built/local/lib.d.ts',
+					src: 'TypeScript/built/local/lib.d.ts',
 					dest: 'public/scripts/lib.d.ts'
 				}, {
 					src: 'bower_components/jasmine/lib/jasmine-core/jasmine.css',
@@ -43,7 +43,7 @@ module.exports = function(grunt){
 		},
 		ts: {
 			options:{
-				compiler: '../TypeScript/built/local/tsc.js',
+				compiler: 'TypeScript/built/local/tsc.js',
 				comments: true,
 				target: 'es5',
 				sourceMap: false
