@@ -1,7 +1,7 @@
 {
-  "name": "test",
+  "name": "LsSpikes",
   "version": "0.0.0",
-  "description": "experiments",
+  "description": "language service experiments",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,15 +9,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/billti/test.git"
+    "url": "https://github.com/billti/LsSpikes"
   },
   "keywords": [
-    "experiments"
+    "language service experiments"
   ],
   "author": "Bill Ticehurst",
   "license": "MIT",
-  "bugs": "https://github.com/billti/test/issues",
-  "homepage": "https://github.com/billti/test",
+  "bugs": "https://github.com/billti/LsSpikes/issues",
+  "homepage": "https://github.com/billti/LsSpikes",
   "dependencies": {
     "http-server": "^0.7.4"
   },
