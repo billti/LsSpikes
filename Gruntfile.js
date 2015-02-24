@@ -24,6 +24,9 @@ module.exports = function(grunt){
 					src: 'TypeScript/built/local/lib.d.ts',
 					dest: 'public/scripts/lib.d.ts'
 				}, {
+					src: 'bower_components/EventEmitter.js/EventEmitter.js',
+					dest: 'public/scripts/EventEmitter.js'
+				}, {
 					src: 'bower_components/jasmine/lib/jasmine-core/jasmine.css',
 					dest: 'public/css/jasmine.css'
 				}, {
@@ -46,7 +49,7 @@ module.exports = function(grunt){
 				compiler: 'TypeScript/built/local/tsc.js',
 				comments: true,
 				target: 'es5',
-				sourceMap: false
+				sourceMap: true
 			},
 			default: {
 				src: ["src/**/*.ts"],
