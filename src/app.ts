@@ -1,4 +1,5 @@
-﻿/// <reference path="../public/scripts/typescriptServices.d.ts"/>
+﻿/// <reference path="typescriptMode.ts"/>
+/// <reference path="../public/scripts/typescriptServices.d.ts"/>
 /// <reference path="../public/scripts/typescriptServices_internal.d.ts"/>
 /// <reference path="codemirror.d.ts"/>
 
@@ -8,6 +9,7 @@ var myEditor;
 var myChart;
 
 window.addEventListener('load', function () {
+    myChart = d3Graph();
     var editorDiv = document.getElementById('editor');
     myEditor = CodeMirror(editorDiv, {
         value: "class Foo { \
@@ -29,7 +31,6 @@ function foo(){\
         lineNumbers: true
     });
     tsls.bindEditor(myEditor);
-    myChart = d3Graph();
 });
 
 interface Graph {

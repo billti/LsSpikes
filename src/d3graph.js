@@ -1,12 +1,12 @@
 var d3Graph = function(){
 
 var margin = {top: 30, right: 20, bottom: 30, left: 20},
-    width = 960 - margin.left - margin.right,
+    width = 500 - margin.left - margin.right,
     barHeight = 20,
     barWidth = width * .8;
 
 var i = 0,
-    duration = 400,
+    duration = 100,
     root;
 
 var tree = d3.layout.tree()
@@ -20,11 +20,6 @@ var svg = d3.select("body").append("svg")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-// d3.json("flare.json", function(error, flare) {
-//   flare.x0 = 0;
-//   flare.y0 = 0;
-//   update(root = flare);
-// });
 return update;
 
 function update(source) {

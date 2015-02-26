@@ -4,12 +4,12 @@
 }
 .editor {
     border: 1px solid black;
-    width: 1000px;
-    height: 400px;
+    width: 50%;
+    height: 300px;
     margin: 25px;
 }
 .elemType {
-    width: 1000px;
+    width: 50%;
     height: 40px;
     background-color: lavender;
     font-family: 'Courier New';
@@ -18,7 +18,7 @@
 }
 .elemHelp {
     font-style: italic;
-    width: 1000px;
+    width: 50%;
     height: 80px;
     margin: 25px;
     padding: 5px;

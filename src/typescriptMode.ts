@@ -92,10 +92,6 @@ module tsls {
         CodeMirror.on(completions, 'select', (completion, elem) => {
             var details = service.getCompletionEntryDetails(docName, index, completion);
 
-            // Test
-            var graph = buildTree(docSourceFile);
-            myChart(graph);
-
             var elemType = details.displayParts.reduce( (prev, curr) => { return prev + curr.text}, "");
             var elemDesc = details.documentation.length > 0 ? details.documentation[0].text : completion;
             elemTypeDOM.textContent = elemType;
@@ -204,12 +200,17 @@ function foo() {\n\
         elemTypeDOM = document.getElementById('elemType');
         elemDescDOM = document.getElementById('elemDesc');
         var doc = editor.getDoc();
+
         function onChange(editor, change) {
             // Don't worry about incremental for now.  Just do a full update
             // Called on every key press when typing
             var docText = doc.getValue();
             updateDoc(docText);	
+
+            var graph = buildTree(docSourceFile);
+            myChart(graph);
         }
+
         indexFromPos = function (line, ch) { return doc.indexFromPos({ line: line, ch: ch }); }
         editor.on('change', onChange);
         doc.setValue(docText);
