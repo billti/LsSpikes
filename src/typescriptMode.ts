@@ -91,7 +91,7 @@ module tsls {
         };
         CodeMirror.on(completions, 'select', (completion, elem) => {
             var details = service.getCompletionEntryDetails(docName, index, completion);
-            
+
             // Test
             var graph = buildTree(docSourceFile);
             myChart(graph);

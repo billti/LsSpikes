@@ -1,37 +1,5 @@
 ﻿/// <reference path="../public/scripts/typescriptServices.d.ts"/>
 
-//interface Scope {
-//    name: string;
-//    members: Array<string>;
-//    childScopes: Array<Scope>;
-//}
-
-//function getScopeForNode(node: ts.Node): Scope {
-//    if (!node.symbol) return null;
-
-//    var result: Scope = {
-//        name: node.symbol.name,
-//        members: [],
-//        childScopes: undefined
-//    };
-
-//    if (node.locals) {
-//        for (var sym in node.locals) {
-//            result.members.push(node.locals[sym].name);
-//        }
-//    }
-
-//    if (node.symbol.flags & ts.SymbolFlags.IsContainer) {
-//        result.childScopes = [];
-//        ts.forEachChild(node,(n) => {
-//            if (n.symbol.flags & ts.SymbolFlags.IsContainer) {
-//                result.childScopes.push(getScopeForNode(n));
-//            }
-//        });
-//    }
-//    return result;
-//}
-
 interface Graph {
     "name": string;
     "size"?: number;
