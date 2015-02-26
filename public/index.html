@@ -4,7 +4,8 @@
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
     <link rel="stylesheet" href="css/codemirror.css"> 
     <link rel="stylesheet" href="css/show-hint.css"> 
-    <link rel="stylesheet" href="css/jasmine.css"> 
+    <link rel="stylesheet" href="css/jasmine.css">
+    <link rel="stylesheet" href="css/styles.css">
     <script src="scripts/codemirror.js"></script>
     <script src="scripts/show-hint.js"></script>
     <script src="scripts/typescriptServices.js"></script>
@@ -12,89 +13,16 @@
     <script src="scripts/typescriptMode.js"></script>
     <script src="scripts/d3.js"></script>
     <script src="scripts/d3graph.js"></script>
-    <script src="scripts/jasmine.js"></script>
-    <script src="scripts/jasmine-html.js"></script>
-    <script src="scripts/boot.js"></script>
     <script src="scripts/app.js"></script>
-
-    <style>
-        body {
-            font-family: verdana;
-            font-size: 12pt;
-        }
-        .editor {
-            border: 1px solid black;
-            width: 1000px;
-            height: 400px;
-            margin: 25px;
-        }
-        .elemType {
-            width: 1000px;
-            height: 40px;
-            background-color: lavender;
-            font-family: 'Courier New';
-            margin: 25px;
-            padding: 5px;
-        }
-        .elemHelp {
-            font-style: italic;
-            width: 1000px;
-            height: 80px;
-            margin: 25px;
-            padding: 5px;
-        }
-        .node rect {
-          cursor: pointer;
-          fill: #fff;
-          fill-opacity: .5;
-          stroke: #3182bd;
-          stroke-width: 1.5px;
-        }
-        .node text {
-          font: 10px sans-serif;
-          pointer-events: none;
-        }
-        path.link {
-          fill: none;
-          stroke: #9ecae1;
-          stroke-width: 1.5px;
-        }
-    </style>
-
-    <script>
-    var myEditor;
-    var myChart;
-    window.addEventListener('load', function(){
-        var editorDiv = document.getElementById('editor');
-        myEditor = CodeMirror(editorDiv, {
-            value: "class Foo { \
-  public age = 42;\
-  constructor(public name: string){\
-  }\
-}\
-\
-function foo(){\
-  if(true){\
-    let x = null;\
-  }\
-  var y = function(){\
-    const name = \"test\";\
-  }\
-}",
-            mode:  "typescript",
-            extraKeys: {"Ctrl-Space": "autocomplete"},
-            lineNumbers: true
-        });
-        tsls.bindEditor(myEditor);
-        myChart = d3Graph();
-    });
-    </script>
+    <!--<script src="scripts/jasmine.js"></script>
+    <script src="scripts/jasmine-html.js"></script>
+    <script src="scripts/boot.js"></script>-->
 </head>
 <body>
     <h2>Sample editor</h2>
     <div id='editor' class='editor'></div>
     <div id='elemType' class='elemType'></div>
     <div id='elemDesc' class='elemHelp'></div>
-    <script src="tests/sample.js"></script>
+    <!--<script src="tests/sample.js"></script>-->
 </body>
 </html>

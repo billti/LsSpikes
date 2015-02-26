@@ -1,4 +1,36 @@
 ﻿/// <reference path="../public/scripts/typescriptServices.d.ts"/>
+/// <reference path="../public/scripts/typescriptServices_internal.d.ts"/>
+/// <reference path="codemirror.d.ts"/>
+
+declare var d3Graph: Function;
+
+var myEditor;
+var myChart;
+
+window.addEventListener('load', function () {
+    var editorDiv = document.getElementById('editor');
+    myEditor = CodeMirror(editorDiv, {
+        value: "class Foo { \
+  public age = 42;\
+  constructor(public name: string){\
+  }\
+}\
+\
+function foo(){\
+  if(true){\
+    let x = null;\
+  }\
+  var y = function(){\
+    const name = \"test\";\
+  }\
+}",
+        mode: "typescript",
+        extraKeys: { "Ctrl-Space": "autocomplete" },
+        lineNumbers: true
+    });
+    tsls.bindEditor(myEditor);
+    myChart = d3Graph();
+});
 
 interface Graph {
     "name": string;
@@ -31,7 +63,7 @@ function buildTree(node: ts.Node): Graph {
             if (elem.name === undefined) {
                 // Replace it with it's children (if they exist), else just drop it.
                 if (elem.children) {
-                    newChildren = newChildren.concat.apply(newChildren, elem.children);
+                    elem.children.forEach(item => newChildren.push(item));
                 }
             } else {
                 // Just move it over

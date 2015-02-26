@@ -1,0 +1,41 @@
+﻿body {
+    font-family: verdana;
+    font-size: 12pt;
+}
+.editor {
+    border: 1px solid black;
+    width: 1000px;
+    height: 400px;
+    margin: 25px;
+}
+.elemType {
+    width: 1000px;
+    height: 40px;
+    background-color: lavender;
+    font-family: 'Courier New';
+    margin: 25px;
+    padding: 5px;
+}
+.elemHelp {
+    font-style: italic;
+    width: 1000px;
+    height: 80px;
+    margin: 25px;
+    padding: 5px;
+}
+.node rect {
+    cursor: pointer;
+    fill: #fff;
+    fill-opacity: .5;
+    stroke: #3182bd;
+    stroke-width: 1.5px;
+}
+.node text {
+    font: 10px sans-serif;
+    pointer-events: none;
+}
+path.link {
+    fill: none;
+    stroke: #9ecae1;
+    stroke-width: 1.5px;
+}

@@ -21,11 +21,17 @@ module.exports = function(grunt){
 					src: 'TypeScript/built/local/typescriptServices.d.ts',
 					dest: 'public/scripts/typescriptServices.d.ts'
 				}, {
+					src: 'TypeScript/built/local/typescriptServices_internal.d.ts',
+					dest: 'public/scripts/typescriptServices_internal.d.ts'
+				}, {
 					src: 'TypeScript/built/local/lib.d.ts',
 					dest: 'public/scripts/lib.d.ts'
 				}, {
 					src: 'src/d3graph.js',
 					dest: 'public/scripts/d3graph.js'
+				}, {
+					src: 'src/styles.css',
+					dest: 'public/css/styles.css'
 				}, {
 					src: 'bower_components/EventEmitter.js/EventEmitter.js',
 					dest: 'public/scripts/EventEmitter.js'
