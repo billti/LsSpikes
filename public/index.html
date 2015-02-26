@@ -11,9 +11,11 @@
     <script src="scripts/EventEmitter.js"></script>
     <script src="scripts/typescriptMode.js"></script>
     <script src="scripts/d3.js"></script>
+    <script src="scripts/d3graph.js"></script>
     <script src="scripts/jasmine.js"></script>
     <script src="scripts/jasmine-html.js"></script>
     <script src="scripts/boot.js"></script>
+    <script src="scripts/app.js"></script>
 
     <style>
         body {
@@ -41,19 +43,50 @@
             margin: 25px;
             padding: 5px;
         }
+        .node rect {
+          cursor: pointer;
+          fill: #fff;
+          fill-opacity: .5;
+          stroke: #3182bd;
+          stroke-width: 1.5px;
+        }
+        .node text {
+          font: 10px sans-serif;
+          pointer-events: none;
+        }
+        path.link {
+          fill: none;
+          stroke: #9ecae1;
+          stroke-width: 1.5px;
+        }
     </style>
 
     <script>
     var myEditor;
+    var myChart;
     window.addEventListener('load', function(){
         var editorDiv = document.getElementById('editor');
         myEditor = CodeMirror(editorDiv, {
-            value: "function myScript () { return 100 ; }\n",
+            value: "class Foo { \
+  public age = 42;\
+  constructor(public name: string){\
+  }\
+}\
+\
+function foo(){\
+  if(true){\
+    let x = null;\
+  }\
+  var y = function(){\
+    const name = \"test\";\
+  }\
+}",
             mode:  "typescript",
             extraKeys: {"Ctrl-Space": "autocomplete"},
             lineNumbers: true
         });
         tsls.bindEditor(myEditor);
+        myChart = d3Graph();
     });
     </script>
 </head>

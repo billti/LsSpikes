@@ -1,6 +1,8 @@
 /// <reference path="codemirror.d.ts"/>
 /// <reference path="../public/scripts/typescriptServices.d.ts"/>
 
+declare var myChart;
+
 module tsls {
     export var version = "0.1";
 
@@ -89,7 +91,11 @@ module tsls {
         };
         CodeMirror.on(completions, 'select', (completion, elem) => {
             var details = service.getCompletionEntryDetails(docName, index, completion);
-            // details.displayParts & display.documentation: Array<{kind: string, text: string>
+            
+            // Test
+            var graph = buildTree(docSourceFile);
+            myChart(graph);
+
             var elemType = details.displayParts.reduce( (prev, curr) => { return prev + curr.text}, "");
             var elemDesc = details.documentation.length > 0 ? details.documentation[0].text : completion;
             elemTypeDOM.textContent = elemType;
@@ -105,7 +111,20 @@ module tsls {
 
     var compilerOptions = ts.getDefaultCompilerOptions();
     var docName = "sample.ts";
-    var docText = "class Foo { public age = 42 }";
+    var docText = "class Foo { \n\
+  public age = 42;\n\
+    constructor(public name: string){\n\
+    }\n\
+}\n\
+    \n\
+function foo() {\n\
+    if (true) {\n\
+        let x = null;\n\
+    }\n\
+    var y = function () {\n\
+        const name = \"test\";\n\
+    }\n\
+}";
     var docVersion = "1";
 
     var defaultLibName = "/scripts/lib.d.ts"

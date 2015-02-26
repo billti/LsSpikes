@@ -24,6 +24,9 @@ module.exports = function(grunt){
 					src: 'TypeScript/built/local/lib.d.ts',
 					dest: 'public/scripts/lib.d.ts'
 				}, {
+					src: 'src/d3graph.js',
+					dest: 'public/scripts/d3graph.js'
+				}, {
 					src: 'bower_components/EventEmitter.js/EventEmitter.js',
 					dest: 'public/scripts/EventEmitter.js'
 				}, {
