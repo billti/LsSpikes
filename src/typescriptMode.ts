@@ -208,7 +208,7 @@ function foo() {\n\
             updateDoc(docText);	
 
             var graph = buildTree(docSourceFile);
-            myChart(graph);
+            myChart(graph, true /* recalc */);
         }
 
         indexFromPos = function (line, ch) { return doc.indexFromPos({ line: line, ch: ch }); }

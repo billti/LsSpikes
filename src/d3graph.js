@@ -1,3 +1,5 @@
+// Code based on the d3 example at http://bl.ocks.org/mbostock/1093025
+
 var d3Graph = function(containerSelector){
 
 var margin = {top: 30, right: 20, bottom: 30, left: 20},
@@ -6,7 +8,7 @@ var margin = {top: 30, right: 20, bottom: 30, left: 20},
     barWidth = width * .8;
 
 var i = 0,
-    duration = 100,
+    duration = 0,
     root;
 
 var tree = d3.layout.tree()
@@ -22,8 +24,10 @@ var svg = d3.select(containerSelector).append("svg")
 
 return update;
 
-function update(source) {
-  root = source;
+function update(source, recalc) {
+  // TODO Track changes only, instead of recreating the whole tree
+  if(!root || recalc) root = source;
+
   // Compute the flattened node list. TODO use d3.layout.hierarchy.
   var nodes = tree.nodes(root);
 
