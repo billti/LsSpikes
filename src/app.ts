@@ -9,7 +9,7 @@ var myEditor;
 var myChart;
 
 window.addEventListener('load', function () {
-    myChart = d3Graph();
+    myChart = d3Graph('#bindingGraph');
     var editorDiv = document.getElementById('editor');
     myEditor = CodeMirror(editorDiv, {
         value: "class Foo { \

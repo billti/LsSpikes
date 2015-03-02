@@ -1,4 +1,4 @@
-var d3Graph = function(){
+var d3Graph = function(containerSelector){
 
 var margin = {top: 30, right: 20, bottom: 30, left: 20},
     width = 500 - margin.left - margin.right,
@@ -15,7 +15,7 @@ var tree = d3.layout.tree()
 var diagonal = d3.svg.diagonal()
     .projection(function(d) { return [d.y, d.x]; });
 
-var svg = d3.select("body").append("svg")
+var svg = d3.select(containerSelector).append("svg")
     .attr("width", width + margin.left + margin.right)
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
