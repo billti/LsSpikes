@@ -3,6 +3,10 @@
     font-size: 12pt;
 }
 
+.CodeMirror {
+    height: auto;
+}
+
 .container {
     display: flex;
     flex-direction: row;
