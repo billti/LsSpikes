@@ -2,11 +2,21 @@
     font-family: verdana;
     font-size: 12pt;
 }
+
+.container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
 .editor {
     border: 1px solid black;
-    width: 50%;
-    height: 300px;
+    height: 500px;
     margin: 25px;
+    flex: 1;
+}
+.graph {
+    margin-top: 50px;
+    flex: 1;
 }
 .elemType {
     width: 50%;
