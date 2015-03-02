@@ -17,7 +17,8 @@ var tree = d3.layout.tree()
 var diagonal = d3.svg.diagonal()
     .projection(function(d) { return [d.y, d.x]; });
 
-var svg = d3.select(containerSelector).append("svg")
+var svg = d3.select(containerSelector).append("svg");
+var svg_g = svg
     .attr("width", width + margin.left + margin.right)
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -33,13 +34,9 @@ function update(source, recalc) {
 
   var height = Math.max(500, nodes.length * barHeight + margin.top + margin.bottom);
 
-  d3.select("svg").transition()
+  svg.transition()
       .duration(duration)
       .attr("height", height);
-
-  d3.select(self.frameElement).transition()
-      .duration(duration)
-      .style("height", height + "px");
 
   // Compute the "layout".
   nodes.forEach(function(n, i) {
@@ -47,12 +44,12 @@ function update(source, recalc) {
   });
 
   // Update the nodes…
-  var node = svg.selectAll("g.node")
+  var node = svg_g.selectAll("g.node")
       .data(nodes, function(d) { return d.id || (d.id = ++i); });
 
   var nodeEnter = node.enter().append("g")
       .attr("class", "node")
-      .attr("transform", function(d) { return "translate(" + source.y0 + "," + source.x0 + ")"; })
+      .attr("transform", function(d) { return "translate(" + source.y + "," + source.x + ")"; })
       .style("opacity", 1e-6);
 
   // Enter any new nodes at the parent's previous position.
@@ -89,14 +86,14 @@ function update(source, recalc) {
       .remove();
 
   // Update the links…
-  var link = svg.selectAll("path.link")
+  var link = svg_g.selectAll("path.link")
       .data(tree.links(nodes), function(d) { return d.target.id; });
 
   // Enter any new links at the parent's previous position.
   link.enter().insert("path", "g")
       .attr("class", "link")
       .attr("d", function(d) {
-        var o = {x: source.x0, y: source.y0};
+        var o = {x: source.x, y: source.y};
         return diagonal({source: o, target: o});
       })
     .transition()
