@@ -1,6 +1,6 @@
 ﻿/// <reference path="typescriptMode.ts"/>
-/// <reference path="../public/scripts/typescriptServices.d.ts"/>
-/// <reference path="../public/scripts/typescriptServices_internal.d.ts"/>
+/// <reference path="../TypeScript/built/local/typescriptServices.d.ts"/>
+/// <reference path="../TypeScript/built/local/typescriptServices_internal.d.ts"/>
 /// <reference path="codemirror.d.ts"/>
 
 declare var d3Graph: Function;

@@ -1,7 +1,4 @@
-.tscache/
-src/.baseDir.ts
 bower_components/
 node_modules/
-public/scripts/
-public/css/
+build/
 *.suo

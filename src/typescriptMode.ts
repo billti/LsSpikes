@@ -1,5 +1,5 @@
 /// <reference path="codemirror.d.ts"/>
-/// <reference path="../public/scripts/typescriptServices.d.ts"/>
+/// <reference path="../TypeScript/built/local/typescriptServices.d.ts"/>
 
 declare var myChart;
 
@@ -123,7 +123,7 @@ function foo() {\n\
 }";
     var docVersion = "1";
 
-    var defaultLibName = "/scripts/lib.d.ts"
+    var defaultLibName = "/TypeScript/lib.d.ts"
     var defaultLibText = "";
 
     var IScriptSnapshot: ts.IScriptSnapshot = {
