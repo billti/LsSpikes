@@ -1,0 +1,8 @@
+{
+    "compilerOptions": {
+        "outDir": "../build",
+        "removeComments": false,
+        "target": "es5",
+        "watch": true
+    }
+}
