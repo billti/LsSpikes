@@ -3,10 +3,9 @@
 
 This repo is for experimenting with various language service implementations.
 
-Install "bower" and "grunt-cli" globally, then run `npm install` and `bower install` to install the dev dependencies. e.g.
+Install "bower", then run `npm install` and `bower install` to install the dev dependencies. e.g.
 
 ```
-npm install -g grunt-cli
 npm install -g bower
 npm install
 bower install
@@ -14,7 +13,7 @@ bower install
 
 To ensure the TypeScript submodule is sync'ed and up to date run `git submodule update`, then change into the TypeScript folder and ensure it's dependencies are installed and it is built locally by running `npm install` and `jake local`.
 
-Build back in the main repo folder by running `grunt`.  Launch the web site with `npm start` and browse to http://localhost:8080.
+Build back in the './src' folder in the main repo by running `tsc`.  Launch the web site with `npm start` and browse to http://localhost:3000.
 
 ## Working with the submodule
 This project contains a TypeScript fork as a submodule for experimenting with. Submodules in Git are tricky. To keep it up to date with the official Microsoft repo:
