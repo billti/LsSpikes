@@ -11,90 +11,161 @@
     <script src="/lib/d3/d3.js"></script>
     <script>
     window.onload = function(){
+        basicTest();
+        treeTest();
+    };
 
-var data  = [
-    {id: 'A', width: 100, color: 'blue'},
-    {id: 'B', width: 150, color: 'yellow'},
-    {id: 'C', width: 120, color: 'green'},
-    {id: 'D', width: 190, color: 'purple'},
-    {id: 'E', width: 170, color: 'red'},
-];
-var mydiv = d3.select('#mydiv');
+    function treeTest(){
+        // Use the default 'children' array to create the structure
+        var data = {
+            "name": "myRoot",
+            "size": 150,
+            "children": [
+                {"name": "child1", "size": 50, "children": null},
+                {"name": "child2", "size": 75, "children": [
+                    {"name": "grandchild1", "size": 80, children: null},
+                    {"name": "grandchild2", "size": 30, children: null},
+                ]},
+                {"name": "child2", "size": 40, "children": null}
+            ]
+        };
 
-var count = 0;
+        // Embed everything in a 'g' element so that you can transform
+        var treeDiv = d3.select('#treeDiv');
+        var svg = treeDiv.append('svg')
+            .attr('width', 400).attr('height', 400)
+            .append('g');
 
-// See http://bost.ocks.org/mike/selection/
-console.log("Doing first 'data'.  'key' function should be called 5 times for each new array element");
-var selection = mydiv.selectAll('div').data(data, function(d){ 
-    // Called for each 'old' existing DOM element, and each element in the new data array.
-    // So will be called 5 times (no existing DOM elements, 5 new array elements)
-    // 'd' is the datum.  'this' is either the DOM node or the data array
-    console.log(" - 'this' is a: " + this.constructor.name);
-    count++;
-    return d.id; 
-});
-console.log(": 'key' function iterations: " + count);
+        // Create a tree layout and parse the node structure into a D3 array
+        var tree = d3.layout.tree();
+        var nodes = tree.nodes(data);
 
-count = 0;
-console.log("Update selection should be empty:")
-selection.each( function(d, i){
-    count++;
-    console.log(' - node: ' + i + ': ' + JSON.stringify(d));
-});
-console.log(": 'selection.each' iterations: " + count);
+        var selection = svg.selectAll('rect').data(nodes, function(d,i){
+            return d.name;
+        });
 
-// Add the enter selection to the update selection
-selection.enter().append('div');
+        var scale = 200;
 
-count = 0;
-console.log("'enter().append()' called.  Update selection should list all 5 elements:")
-selection.each( function(d, i){
-    // 'd' is the datum, 'this' is the DOM node
-    count++;
-    console.log(' - node: ' + i + ': ' + JSON.stringify(d));
-});
-console.log(": 'selection.each' iterations: " + count);
+        // Group child svg elements under a 'g' node (i.e. don't put 'text' under a 'rect')
+        var enterGroup = selection.enter().append('g');
 
+        enterGroup.append('rect')
+            .attr('x', function(d,i){
+                return d.x * scale * 2;
+            })
+            .attr('y', function(d,i){
+                return d.y * scale + 10;
+            })
+            .attr('rx', 20).attr('ry', 20)
+            .attr('width', 100).attr('height', 50)
+            .style('fill', 'yellow').style('stroke', 'black');
 
-// Splice rather than delete, as data() tries to bind for missing elements in sparse arrays
-data.splice(2,1);
+        enterGroup.append('text')
+            .style('fill', 'blue')
+            .style('font-family', 'consolas')
+            .style('font-size', '12px')
+            .attr('x', function(d,i){
+                return d.x * scale * 2 + 15;
+            })
+            .attr('y', function(d,i){
+                return d.y * scale + 25;
+            })
+            .text(function(d){
+                return d.name;
+            });
+    }
 
-// Be sure to assign back to selection, else it still holds the old selection.
-count = 0;
-console.log("'data()' called with one item removed. 'key' function should be called 9 times; 5 existing DOM nodes, 4 current array objects:")
-selection = selection.data(data, function(d, i){ 
-    // Should be called for 5 existing DOM elements, and 4 current array entries
-    console.log(" - 'this' is a: " + this.constructor.name);
-    count++;
-    return d.id; 
-});
-console.log(": 'key' function iterations: " + count);
+    function basicTest(){
+        var data  = [
+            {id: 'A', width: 100, color: 'blue'},
+            {id: 'B', width: 150, color: 'yellow'},
+            {id: 'C', width: 120, color: 'green'},
+            {id: 'D', width: 190, color: 'purple'},
+            {id: 'E', width: 170, color: 'red'},
+        ];
+        var mydiv = d3.select('#mydiv');
 
-count = 0;
-console.log('Update selection should have 4 nodes:');
-selection.each( function(d, i){
-    count++;
-    console.log(' - node: ' + i + ': ' + JSON.stringify(d));
-});
-console.log(":'selection.each' iterations: " + count);
+        var count = 0;
 
-count = 0;
-var removed = selection.exit();
-console.log("'exit()' selection should have 1 node");
-removed.each(function(d,i){
-    // 'd' is the datum, 'this' is the DOM node to remove.
-    count++;
-    console.log(' - node: ' + i + ': ' + JSON.stringify(d));
-});
-console.log("'exit().each' iterations: " + count);
+        // See http://bost.ocks.org/mike/selection/
+        console.log("Doing first 'data'.  'key' function should be called 5 times for each new array element");
+        var selection = mydiv.selectAll('div').data(data, function(d){ 
+            // Called for each 'old' existing DOM element, and each element in the new data array.
+            // So will be called 5 times (no existing DOM elements, 5 new array elements)
+            // 'd' is the datum.  'this' is either the DOM node or the data array
+            console.log(" - 'this' is a: " + this.constructor.name);
+            count++;
+            return d.id; 
+        });
+        console.log(": 'key' function iterations: " + count);
 
-// Note: Need to call .remove() on the .exit() selection to actually remove it from the DOM
+        count = 0;
+        console.log("Update selection should be empty:")
+        selection.each( function(d, i){
+            count++;
+            console.log(' - node: ' + i + ': ' + JSON.stringify(d));
+        });
+        console.log(": 'selection.each' iterations: " + count);
 
+        // Add the enter selection to the update selection
+        selection.enter().append('div');
 
-}; // onload
+        count = 0;
+        console.log("'enter().append()' called.  Update selection should list all 5 elements:")
+        selection.each( function(d, i){
+            // 'd' is the datum, 'this' is the DOM node
+            count++;
+            console.log(' - node: ' + i + ': ' + JSON.stringify(d));
+        });
+        console.log(": 'selection.each' iterations: " + count);
+        selection
+            .style('width', function(d){
+                return d.width + "px";
+            })
+            .style('height', '15px')
+            .style('background-color', function(d){
+                return d.color
+            });
+
+        // Splice rather than delete, as data() tries to bind for missing elements in sparse arrays
+        data.splice(2,1);
+
+        // Be sure to assign back to selection, else it still holds the old selection.
+        count = 0;
+        console.log("'data()' called with one item removed. 'key' function should be called 9 times; 5 existing DOM nodes, 4 current array objects:")
+        selection = selection.data(data, function(d, i){ 
+            // Should be called for 5 existing DOM elements, and 4 current array entries
+            console.log(" - 'this' is a: " + this.constructor.name);
+            count++;
+            return d.id; 
+        });
+        console.log(": 'key' function iterations: " + count);
+
+        count = 0;
+        console.log('Update selection should have 4 nodes:');
+        selection.each( function(d, i){
+            count++;
+            console.log(' - node: ' + i + ': ' + JSON.stringify(d));
+        });
+        console.log(":'selection.each' iterations: " + count);
+
+        count = 0;
+        var removed = selection.exit();
+        console.log("'exit()' selection should have 1 node");
+        removed.each(function(d,i){
+            // 'd' is the datum, 'this' is the DOM node to remove.
+            count++;
+            console.log(' - node: ' + i + ': ' + JSON.stringify(d));
+        });
+        console.log("'exit().each' iterations: " + count);
+        
+        // Need to call .remove() on the .exit() selection to actually remove it from the DOM
+        removed.remove();
+    };
     </script>
 </head>
 <body>
     <div id='mydiv'></div>
+    <div id='treeDiv'></div>
 </body>
 </html>
