@@ -12,14 +12,85 @@
     <script>
     window.onload = function(){
 
-var data  = [34, 10, 19, 13, 5];
+var data  = [
+    {id: 'A', width: 100, color: 'blue'},
+    {id: 'B', width: 150, color: 'yellow'},
+    {id: 'C', width: 120, color: 'green'},
+    {id: 'D', width: 190, color: 'purple'},
+    {id: 'E', width: 170, color: 'red'},
+];
 var mydiv = d3.select('#mydiv');
-var nodes = mydiv.selectAll('div').data(data);
-nodes.enter().append('div');
-nodes.text("text")
-    .style('width', function(d){return (d * 10) + "px";})
-    .style('background-color', 'blue');
-    
+
+var count = 0;
+
+// See http://bost.ocks.org/mike/selection/
+console.log("Doing first 'data'.  'key' function should be called 5 times for each new array element");
+var selection = mydiv.selectAll('div').data(data, function(d){ 
+    // Called for each 'old' existing DOM element, and each element in the new data array.
+    // So will be called 5 times (no existing DOM elements, 5 new array elements)
+    // 'd' is the datum.  'this' is either the DOM node or the data array
+    console.log(" - 'this' is a: " + this.constructor.name);
+    count++;
+    return d.id; 
+});
+console.log(": 'key' function iterations: " + count);
+
+count = 0;
+console.log("Update selection should be empty:")
+selection.each( function(d, i){
+    count++;
+    console.log(' - node: ' + i + ': ' + JSON.stringify(d));
+});
+console.log(": 'selection.each' iterations: " + count);
+
+// Add the enter selection to the update selection
+selection.enter().append('div');
+
+count = 0;
+console.log("'enter().append()' called.  Update selection should list all 5 elements:")
+selection.each( function(d, i){
+    // 'd' is the datum, 'this' is the DOM node
+    count++;
+    console.log(' - node: ' + i + ': ' + JSON.stringify(d));
+});
+console.log(": 'selection.each' iterations: " + count);
+
+
+// Splice rather than delete, as data() tries to bind for missing elements in sparse arrays
+data.splice(2,1);
+
+// Be sure to assign back to selection, else it still holds the old selection.
+count = 0;
+console.log("'data()' called with one item removed. 'key' function should be called 9 times; 5 existing DOM nodes, 4 current array objects:")
+selection = selection.data(data, function(d, i){ 
+    // Should be called for 5 existing DOM elements, and 4 current array entries
+    console.log(" - 'this' is a: " + this.constructor.name);
+    count++;
+    return d.id; 
+});
+console.log(": 'key' function iterations: " + count);
+
+count = 0;
+console.log('Update selection should have 4 nodes:');
+selection.each( function(d, i){
+    count++;
+    console.log(' - node: ' + i + ': ' + JSON.stringify(d));
+});
+console.log(":'selection.each' iterations: " + count);
+
+count = 0;
+var removed = selection.exit();
+console.log("'exit()' selection should have 1 node");
+removed.each(function(d,i){
+    // 'd' is the datum, 'this' is the DOM node to remove.
+    count++;
+    console.log(' - node: ' + i + ': ' + JSON.stringify(d));
+});
+console.log("'exit().each' iterations: " + count);
+
+// Note: Need to call .remove() on the .exit() selection to actually remove it from the DOM
+
+
 }; // onload
     </script>
 </head>
