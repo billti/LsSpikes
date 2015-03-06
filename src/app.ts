@@ -1,6 +1,5 @@
 ﻿/// <reference path="typescriptMode.ts"/>
 /// <reference path="../TypeScript/built/local/typescriptServices.d.ts"/>
-/// <reference path="../TypeScript/built/local/typescriptServices_internal.d.ts"/>
 /// <reference path="codemirror.d.ts"/>
 
 declare var d3Graph: Function;
@@ -81,6 +80,8 @@ function buildTree(node: ts.Node): Graph {
     return result;
 
     function getNameForNodesOfInterest(node: ts.Node): string {
+        var looseTs: any = ts; // HACK until internal.d.ts is fixed
+
         switch (node.kind) {
             case ts.SyntaxKind.AnyKeyword:
             case ts.SyntaxKind.Identifier:
@@ -104,11 +105,11 @@ function buildTree(node: ts.Node): Graph {
                 var name = (<ts.FunctionExpression>node).name && (<ts.FunctionExpression>node).name.text || "[anon]";
                 return "Function: " + name;
             case ts.SyntaxKind.Parameter:
-                return "Param: " + (<ts.ParameterDeclaration>node).name.getText(ts.getSourceFileOfNode(node));
+                return "Param: " + (<ts.ParameterDeclaration>node).name.getText(looseTs.getSourceFileOfNode(node));
             case ts.SyntaxKind.VariableDeclaration:
-                return "Var: " + (<ts.VariableDeclaration>node).name.getText(ts.getSourceFileOfNode(node));
+                return "Var: " + (<ts.VariableDeclaration>node).name.getText(looseTs.getSourceFileOfNode(node));
             case ts.SyntaxKind.PropertyDeclaration:
-                return "Property: " + (<ts.PropertyDeclaration>node).name.getText(ts.getSourceFileOfNode(node));
+                return "Property: " + (<ts.PropertyDeclaration>node).name.getText(looseTs.getSourceFileOfNode(node));
             default:
                 //throw "Unrecognized token kind: " + node.kind;
                 console.log("Unrecognized token kind: " + eval("ts.SyntaxKind[node.kind]"));

@@ -172,7 +172,7 @@ function foo() {\n\
     var updateDoc = function (newText: string) {
         docVersion = (parseInt(docVersion) + 1).toString();
         docText = newText;
-        docSourceFile = docRegistry.updateDocument(docSourceFile, docName, compilerOptions, IScriptSnapshot, docVersion, undefined);
+        docSourceFile = docRegistry.updateDocument(docName, compilerOptions, IScriptSnapshot, docVersion);
 
         // classifications is an array of { classificationType: string; textSpan: {start: number; length: number;};}, using 0 based char offsets
         classifications = service.getSyntacticClassifications(docName, { start: 0, length: IScriptSnapshot.getLength() });
