@@ -8,11 +8,15 @@
             margin: 10px;
         }
     </style>
+    <link rel="stylesheet" href="/css/styles.css">
     <script src="/lib/d3/d3.js"></script>
+    <script src="/build/d3parts.js"></script>
     <script>
     window.onload = function(){
         basicTest();
-        treeTest();
+        //treeTest();
+        var tree = new d3Parts.AstGraph(treeDiv, 1000, 800);
+        tree.render();
     };
 
     function treeTest(){

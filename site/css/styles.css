@@ -53,3 +53,15 @@ path.link {
     stroke: #9ecae1;
     stroke-width: 1.5px;
 }
+
+g.astNode rect {
+    fill: yellow;
+    stroke: black;
+}
+
+g.astNode text {
+    text-anchor: middle;
+    fill: blue;
+    font-family: consolas
+    font-size: 12px
+}
