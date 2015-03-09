@@ -34,7 +34,15 @@
         var treeDiv = d3.select('#treeDiv');
         var svg = treeDiv.append('svg')
             .attr('width', 400).attr('height', 400)
+            .call(
+                d3.behavior.zoom()
+                    .scaleExtent([1, 10])
+                    .on("zoom", zoom))
             .append('g');
+
+        function zoom(){
+            svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+        }
 
         // Create a tree layout and parse the node structure into a D3 array
         var tree = d3.layout.tree();

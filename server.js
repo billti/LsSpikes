@@ -7,6 +7,9 @@ app.use('/lib', express.static('bower_components'));
 // Serve compiled files directly from the build folder
 app.use('/build', express.static('build'));
 
+// Serve source files for debugging
+app.use('/src', express.static('src'));
+
 // Serve TypeScript files directly from the local submodule build
 app.use('/typescript', express.static('TypeScript/built/local'));
 
