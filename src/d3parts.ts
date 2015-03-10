@@ -14,9 +14,7 @@ module d3Parts {
         treeNodes: AstNode;
         treeLayout: D3.Layout.TreeLayout;
 
-        private static scale = 125;
-
-        constructor(container: HTMLDivElement, width: number, height: number) {
+        constructor(container: HTMLDivElement, private width: number, height: number) {
             this.svg_g = d3.select(container)
                 .append('svg')
                 .attr('width', width)
@@ -45,17 +43,36 @@ module d3Parts {
                         id: 2,
                         text: "var",
                         kind: ts.SyntaxKind.VariableDeclaration,
-                        children: null
+                        children: [{
+                            id: 3,
+                            text: "function",
+                            kind: ts.SyntaxKind.ClassDeclaration,
+                            children: null
+                        }, {
+                                id: 4,
+                                text: "forEach",
+                                kind: ts.SyntaxKind.VariableDeclaration,
+                                children: null
+                            }
+                        ]
                     }
                 ]
             };
 
-            this.treeLayout = d3.layout.tree();
+            this.treeLayout = d3.layout.tree().nodeSize([200, 100]);
         }
 
         public render() {
             // TODO: D3 typing is wrong here.  Doesn't require a GraphNode as input.
             var graphNodes = this.treeLayout.nodes(<any>(this.treeNodes)); 
+            var graphLinks = this.treeLayout.links(graphNodes);
+            var diagonal = d3.svg.diagonal().projection((d) => [d.x + 50 + this.width / 2, d.y + 25]);
+
+            var links = this.svg_g.selectAll('path.link')
+                .data(graphLinks)
+                .enter().append('path')
+                .classed('link', true)
+                .attr('d', diagonal);
 
             // TODO: Can the typing make the 'key' callback generic off the first arg to 'data'?
             var selection = this.svg_g.selectAll('g').data(graphNodes, (d, i) => d.id);
@@ -63,17 +80,14 @@ module d3Parts {
             var enterGroup = selection.enter().append('g').classed('astNode', true);
 
             enterGroup.append('rect')
-                .attr('x', (d, i) => d.x * AstGraph.scale * 2)
-                .attr('y', (d, i) => d.y * AstGraph.scale + 10)
+                .attr('x', (d, i) => d.x + this.width / 2)
+                .attr('y', (d, i) => d.y)
                 .attr('rx', 20).attr('ry', 20)
                 .attr('width', 100).attr('height', 50);
 
             enterGroup.append('text')
-                .style('fill', 'blue')
-                .style('font-family', 'consolas')
-                .style('font-size', '12px')
-                .attr('x', (d, i) => d.x * AstGraph.scale * 2 + 45 )
-                .attr('y', (d, i) => d.y * AstGraph.scale + 25 )
+                .attr('x', (d, i) => d.x + 45 + this.width / 2 )
+                .attr('y', (d, i) => d.y + 25 )
                 .text( (d) => d.text );
         }
     }

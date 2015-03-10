@@ -62,6 +62,6 @@ g.astNode rect {
 g.astNode text {
     text-anchor: middle;
     fill: blue;
-    font-family: consolas
-    font-size: 12px
+    font-family: consolas;
+    font-size: 12px;
 }
