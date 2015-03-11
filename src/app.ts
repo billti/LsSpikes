@@ -5,13 +5,8 @@
 declare var d3Graph: Function;
 
 var myEditor;
-var myChart;
-
-window.addEventListener('load', function () {
-    myChart = d3Graph('#bindingGraph');
-    var editorDiv = document.getElementById('editor');
-    myEditor = CodeMirror(editorDiv, {
-        value: "class Foo { \
+var myChart: d3Parts.AstGraph;
+var defaultText = "class Foo { \
   public age = 42;\
   constructor(public name: string){\
   }\
@@ -24,7 +19,15 @@ function foo(){\
   var y = function(){\
     const name = \"test\";\
   }\
-}",
+}";
+
+window.addEventListener('load', function () {
+    //myChart = d3Graph('#bindingGraph');
+    var astGraph = document.querySelector('#bindingGraph');
+    myChart = new d3Parts.AstGraph(astGraph, 600, 600);
+    var editorDiv = document.getElementById('editor');
+    myEditor = CodeMirror(editorDiv, {
+        value: defaultText,
         mode: "typescript",
         extraKeys: { "Ctrl-Space": "autocomplete" },
         lineNumbers: true
@@ -39,6 +42,7 @@ interface Graph {
 }
 
 interface AstNode {
+    id: number;
     text: string;
     width: number;
     isLeaf: boolean;
@@ -46,10 +50,11 @@ interface AstNode {
     children: AstNode[];
 }
 
+var nodeId = 0;
 function buildAstFromNode(node: ts.Node): AstNode {
     // Set node defaults
     var thisNode: AstNode = {
-        text: "", width: 0, isLeaf: true, kind: node.kind, children: null
+        id: ++nodeId, text: "", width: 0, isLeaf: true, kind: node.kind, children: null
     };
 
     var looseTs: any = ts; // HACK until internal.d.ts is fixed
@@ -60,30 +65,74 @@ function buildAstFromNode(node: ts.Node): AstNode {
         case ts.SyntaxKind.Block:
             thisNode.text = "Block"
             break;
+        case ts.SyntaxKind.PublicKeyword:
+        case ts.SyntaxKind.StringKeyword:
+        case ts.SyntaxKind.StringLiteral:
+        case ts.SyntaxKind.NullKeyword:
+        case ts.SyntaxKind.TrueKeyword:
+        case ts.SyntaxKind.FalseKeyword:
+        case ts.SyntaxKind.FirstLiteralToken:
+            thisNode.text = node.getText();
+            break;
+        case ts.SyntaxKind.Identifier:
+            thisNode.text = "'" + node.getText() + "'";
+            break;
         case ts.SyntaxKind.ClassDeclaration:
-            thisNode.text = "Class " + (<ts.ClassDeclaration>node).name.text;
+            thisNode.text = "class decl";
             break;
         case ts.SyntaxKind.Constructor:
             thisNode.text = "constructor";
             break;
         case ts.SyntaxKind.FunctionDeclaration:
-            thisNode.text = "fn " + (<ts.FunctionDeclaration>node).name.text;
+            thisNode.text = "fn decl";
             break;
         case ts.SyntaxKind.FunctionExpression:
-            var name = (<ts.FunctionExpression>node).name && (<ts.FunctionExpression>node).name.text || "[anon]";
-            thisNode.text = "fn " + name;
+            var name = (<ts.FunctionExpression>node).name && (<ts.FunctionExpression>node).name.text || "<anon>";
+            thisNode.text = "fn expr '" + name + "'";
             break;
         case ts.SyntaxKind.Parameter:
             thisNode.text = "" + (<ts.ParameterDeclaration>node).name.getText(looseTs.getSourceFileOfNode(node));
             break;
         case ts.SyntaxKind.VariableDeclaration:
-            thisNode.text = "var " + (<ts.VariableDeclaration>node).name.getText(looseTs.getSourceFileOfNode(node));
+            thisNode.text = "var decl";
             break;
         case ts.SyntaxKind.PropertyDeclaration:
-            thisNode.text = "Prop: " + (<ts.PropertyDeclaration>node).name.getText(looseTs.getSourceFileOfNode(node));
+            thisNode.text = "prop decl";
+            break;
+        case ts.SyntaxKind.IfStatement:
+            thisNode.text = "if";
+            break;
+        case ts.SyntaxKind.VariableStatement:
+            thisNode.text = "var";
+            break;
+        case ts.SyntaxKind.WhileStatement:
+            thisNode.text = "while";
+            break;
+        case ts.SyntaxKind.BreakStatement:
+            thisNode.text = "break";
+            break;
+        case ts.SyntaxKind.ReturnStatement:
+            thisNode.text = "return";
+            break;
+        case ts.SyntaxKind.VariableDeclarationList:
+            thisNode.text = "var decl list";
+            break;
+        case ts.SyntaxKind.BinaryExpression:
+            thisNode.text = "binExpr";
+            break;
+        case ts.SyntaxKind.EqualsEqualsToken:
+            thisNode.text = "==";
+            break;
+        case ts.SyntaxKind.EndOfFileToken:
+            thisNode.text = "<EOF>";
+            break;
         default:
             //throw "Unrecognized token kind: " + node.kind;
-            console.log("Unrecognized token kind: " + eval("ts.SyntaxKind[node.kind]"));
+            var nodeKind = eval("ts.SyntaxKind[node.kind]");
+            var looseNode: any = node;
+            if (looseNode.name && looseNode.name.text) nodeKind += (": " + looseNode.name.text);
+            console.log("Unrecognized token kind: " + nodeKind + ". getText() = " + node.getText());
+            thisNode.text = nodeKind;
             break;
     }
 
@@ -96,84 +145,4 @@ function buildAstFromNode(node: ts.Node): AstNode {
     if (thisNode.children) thisNode.isLeaf = false;
 
     return thisNode;
-}
-
-function buildTree(node: ts.Node): Graph {
-    var result: Graph = undefined;
-    
-    var name = getNameForNodesOfInterest(node);
-
-    result = { name: name };
-
-    // Add each child of interest
-    ts.forEachChild(node,(child) => {
-        var childNode = buildTree(child);
-        if (childNode) {
-            if (!result.children) result.children = [];
-            result.children.push(childNode);
-        }
-    });
-
-     // Collapse the unnamed nodes.  As this is at the tail end of construction, only one deep is needed (or indeed, possible)
-     // When doing forEach over the array, the element and it's index are a snapshot, however the view of the array itself is mutated.
-     // Thus, create a new children array to attach to the parent.
-    if (result.children) {
-        var newChildren = [];
-        result.children.forEach((elem, idx, arr) => {
-            if (elem.name === undefined) {
-                // Replace it with it's children (if they exist), else just drop it.
-                if (elem.children) {
-                    elem.children.forEach(item => newChildren.push(item));
-                }
-            } else {
-                // Just move it over
-                newChildren.push(elem);
-            }
-        });
-        if (newChildren.length > 0) {
-            result.children = newChildren;
-        } else {
-            delete result.children;
-        }
-    }
-
-    return result;
-
-    function getNameForNodesOfInterest(node: ts.Node): string {
-        var looseTs: any = ts; // HACK until internal.d.ts is fixed
-
-        switch (node.kind) {
-            case ts.SyntaxKind.AnyKeyword:
-            case ts.SyntaxKind.Identifier:
-            case ts.SyntaxKind.VariableStatement:
-            case ts.SyntaxKind.ExpressionStatement:
-            case ts.SyntaxKind.PublicKeyword:
-            case ts.SyntaxKind.FirstLiteralToken:
-            case ts.SyntaxKind.EndOfFileToken:
-                return undefined;
-            case ts.SyntaxKind.SourceFile:
-                return "File: " + (<ts.SourceFile>node).fileName;
-            case ts.SyntaxKind.Block:
-                return "Block: ";// + (<ts.SourceFile>node).fileName;
-            case ts.SyntaxKind.ClassDeclaration:
-                return "Class: " + (<ts.ClassDeclaration>node).name.text;
-            case ts.SyntaxKind.Constructor:
-                return "constructor: ";
-            case ts.SyntaxKind.FunctionDeclaration:
-                return "Function: " + (<ts.FunctionDeclaration>node).name.text;
-            case ts.SyntaxKind.FunctionExpression:
-                var name = (<ts.FunctionExpression>node).name && (<ts.FunctionExpression>node).name.text || "[anon]";
-                return "Function: " + name;
-            case ts.SyntaxKind.Parameter:
-                return "Param: " + (<ts.ParameterDeclaration>node).name.getText(looseTs.getSourceFileOfNode(node));
-            case ts.SyntaxKind.VariableDeclaration:
-                return "Var: " + (<ts.VariableDeclaration>node).name.getText(looseTs.getSourceFileOfNode(node));
-            case ts.SyntaxKind.PropertyDeclaration:
-                return "Property: " + (<ts.PropertyDeclaration>node).name.getText(looseTs.getSourceFileOfNode(node));
-            default:
-                //throw "Unrecognized token kind: " + node.kind;
-                console.log("Unrecognized token kind: " + eval("ts.SyntaxKind[node.kind]"));
-                return undefined;
-        }
-    }
 }

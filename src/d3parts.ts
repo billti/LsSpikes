@@ -14,65 +14,34 @@ module d3Parts {
         treeNodes: AstNode;
         treeLayout: D3.Layout.TreeLayout;
 
-        constructor(container: HTMLDivElement, private width: number, height: number) {
+        constructor(container: Element, private width: number, height: number) {
             this.svg_g = d3.select(container)
                 .append('svg')
                 .attr('width', width)
                 .attr('height', height)
                 .call(
                     d3.behavior.zoom()
-                        .scaleExtent([1, 10])
+                        .scaleExtent([-10, 10])
                         .on("zoom", () => {
                             this.svg_g.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")")
                         })
                 )
                 .append('g');
 
-            // Mock data for now
-            this.treeNodes = {
-                id: 0,
-                text: "file1.ts",
-                kind: ts.SyntaxKind.SourceFile,
-                children: [
-                    {
-                        id: 1,
-                        text: "class",
-                        kind: ts.SyntaxKind.ClassDeclaration,
-                        children: null
-                    }, {
-                        id: 2,
-                        text: "var",
-                        kind: ts.SyntaxKind.VariableDeclaration,
-                        children: [{
-                            id: 3,
-                            text: "function",
-                            kind: ts.SyntaxKind.ClassDeclaration,
-                            children: null
-                        }, {
-                                id: 4,
-                                text: "forEach",
-                                kind: ts.SyntaxKind.VariableDeclaration,
-                                children: null
-                            }
-                        ]
-                    }
-                ]
-            };
-
             this.treeLayout = d3.layout.tree().nodeSize([200, 100]);
         }
 
-        public render() {
+        public render(data) {
             // TODO: D3 typing is wrong here.  Doesn't require a GraphNode as input.
-            var graphNodes = this.treeLayout.nodes(<any>(this.treeNodes)); 
+            var graphNodes = this.treeLayout.nodes(data); 
             var graphLinks = this.treeLayout.links(graphNodes);
             var diagonal = d3.svg.diagonal().projection((d) => [d.x + 50 + this.width / 2, d.y + 25]);
 
             var links = this.svg_g.selectAll('path.link')
-                .data(graphLinks)
-                .enter().append('path')
-                .classed('link', true)
-                .attr('d', diagonal);
+                .data(graphLinks);
+            links.enter().append('path').classed('link', true)
+            links.attr('d', diagonal);
+            links.exit().remove();
 
             // TODO: Can the typing make the 'key' callback generic off the first arg to 'data'?
             var selection = this.svg_g.selectAll('g').data(graphNodes, (d, i) => d.id);
@@ -88,7 +57,9 @@ module d3Parts {
             enterGroup.append('text')
                 .attr('x', (d, i) => d.x + 45 + this.width / 2 )
                 .attr('y', (d, i) => d.y + 25 )
-                .text( (d) => d.text );
+                .text((d) => d.text);
+
+            selection.exit().remove();
         }
     }
 }

@@ -1,8 +1,6 @@
 /// <reference path="codemirror.d.ts"/>
 /// <reference path="../TypeScript/built/local/typescriptServices.d.ts"/>
 
-declare var myChart;
-
 module tsls {
     export var version = "0.1";
 
@@ -207,10 +205,11 @@ function foo() {\n\
             var docText = doc.getValue();
             updateDoc(docText);	
 
-            var graph = buildTree(docSourceFile);
-            myChart(graph, true /* recalc */);
+            //var graph = buildTree(docSourceFile);
+            //myChart(graph, true /* recalc */);
 
             var astGraph = buildAstFromNode(docSourceFile);
+            myChart.render(astGraph);
         }
 
         indexFromPos = function (line, ch) { return doc.indexFromPos({ line: line, ch: ch }); }
