@@ -128,7 +128,7 @@ function buildAstFromNode(node: ts.Node): AstNode {
             break;
         default:
             //throw "Unrecognized token kind: " + node.kind;
-            var nodeKind = eval("ts.SyntaxKind[node.kind]");
+            var nodeKind = looseTs.SyntaxKind[node.kind];
             var looseNode: any = node;
             if (looseNode.name && looseNode.name.text) nodeKind += (": " + looseNode.name.text);
             console.log("Unrecognized token kind: " + nodeKind + ". getText() = " + node.getText());
