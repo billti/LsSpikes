@@ -1,5 +1,8 @@
-﻿/// <reference path="typescriptMode.ts"/>
+﻿/// <reference path="d3parts.ts"/>
+/// <reference path="typescriptMode.ts"/>
+/// <reference path="../TypeScript/built/local/typescript.d.ts"/>
 /// <reference path="../TypeScript/built/local/typescriptServices.d.ts"/>
+/// <reference path="../TypeScript/built/local/typescript_internal.d.ts"/>
 /// <reference path="codemirror.d.ts"/>
 
 declare var d3Graph: Function;
@@ -48,6 +51,9 @@ interface AstNode {
     isLeaf: boolean;
     kind: ts.SyntaxKind;
     children: AstNode[];
+    isLexicalScope?: boolean;
+    isBlockScoped?: boolean;
+    classes?: string;
 }
 
 var nodeId = 0;
@@ -142,7 +148,10 @@ function buildAstFromNode(node: ts.Node): AstNode {
     })
 
     thisNode.width = thisNode.text.length * 10;
+
     if (thisNode.children) thisNode.isLeaf = false;
+    if (ts.nodeStartsNewLexicalEnvironment(node)) thisNode.isLexicalScope = true;
+    if (ts.isBlockOrCatchScoped(<any>node)) thisNode.isBlockScoped = true;
 
     return thisNode;
 }

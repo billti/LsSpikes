@@ -54,8 +54,8 @@ path.link {
     stroke-width: 1.5px;
 }
 
-g.astNode rect {
-    fill: yellow;
+.astNode {
+    fill: #FFFFAA;
     stroke: black;
 }
 
@@ -63,9 +63,18 @@ g.astNode rect {
     stroke-width: 2px;
 }
 
+.isLexical {
+    stroke: gray;
+    stroke-dasharray: 10 5;
+}
+
+.isBlockScoped {
+    fill: #DCFFE9;
+}
+
 g.astNode text {
     text-anchor: middle;
     fill: blue;
-    font-family: consolas;
+    font-family: 'Courier New';
     font-size: 12px;
 }

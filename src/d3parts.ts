@@ -35,7 +35,7 @@ module d3Parts {
             // TODO: D3 typing is wrong here.  Doesn't require a GraphNode as input.
             var graphNodes = this.treeLayout.nodes(data); 
             var graphLinks = this.treeLayout.links(graphNodes);
-            var diagonal = d3.svg.diagonal().projection((d) => [d.x + 50 + this.width / 2, d.y + 25]);
+            var diagonal = d3.svg.diagonal().projection((d) => [d.x + this.width / 2, d.y + 25]);
 
             var links = this.svg_g.selectAll('path.link')
                 .data(graphLinks);
@@ -49,14 +49,17 @@ module d3Parts {
             var enterGroup = selection.enter().append('g').classed('astNode', true);
 
             enterGroup.append('rect')
-                .attr('x', (d, i) => d.x + this.width / 2)
+                .attr('x', (d, i) => d.x + this.width / 2 - d.width / 2 - 5)
                 .attr('y', (d, i) => d.y)
                 .attr('rx', 20).attr('ry', 20)
-                .attr('width', 100).attr('height', 50)
-                .classed('isLeaf', (d) => d.isLeaf);
+                .attr('width', d => d.width + 10)
+                .attr('height', 50)
+                .classed('isLeaf',(d) => d.isLeaf)
+                .classed('isLexical',(d) => d.isLexicalScope)
+                .classed('isBlockScoped',(d) => d.isBlockScoped);
 
             enterGroup.append('text')
-                .attr('x', (d, i) => d.x + 45 + this.width / 2 )
+                .attr('x', (d, i) => d.x + this.width / 2 )
                 .attr('y', (d, i) => d.y + 25 )
                 .text((d) => d.text);
 
