@@ -59,6 +59,10 @@ g.astNode rect {
     stroke: black;
 }
 
+.isLeaf {
+    stroke-width: 2px;
+}
+
 g.astNode text {
     text-anchor: middle;
     fill: blue;

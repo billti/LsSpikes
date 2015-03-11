@@ -52,7 +52,8 @@ module d3Parts {
                 .attr('x', (d, i) => d.x + this.width / 2)
                 .attr('y', (d, i) => d.y)
                 .attr('rx', 20).attr('ry', 20)
-                .attr('width', 100).attr('height', 50);
+                .attr('width', 100).attr('height', 50)
+                .classed('isLeaf', (d) => d.isLeaf);
 
             enterGroup.append('text')
                 .attr('x', (d, i) => d.x + 45 + this.width / 2 )

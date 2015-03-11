@@ -65,17 +65,17 @@ function buildAstFromNode(node: ts.Node): AstNode {
         case ts.SyntaxKind.Block:
             thisNode.text = "Block"
             break;
-        case ts.SyntaxKind.PublicKeyword:
-        case ts.SyntaxKind.StringKeyword:
         case ts.SyntaxKind.StringLiteral:
         case ts.SyntaxKind.NullKeyword:
         case ts.SyntaxKind.TrueKeyword:
         case ts.SyntaxKind.FalseKeyword:
         case ts.SyntaxKind.FirstLiteralToken:
+        case ts.SyntaxKind.PublicKeyword:
+        case ts.SyntaxKind.StringKeyword:
             thisNode.text = node.getText();
             break;
         case ts.SyntaxKind.Identifier:
-            thisNode.text = "'" + node.getText() + "'";
+            thisNode.text = "id '" + node.getText() + "'";
             break;
         case ts.SyntaxKind.ClassDeclaration:
             thisNode.text = "class decl";
@@ -91,7 +91,7 @@ function buildAstFromNode(node: ts.Node): AstNode {
             thisNode.text = "fn expr '" + name + "'";
             break;
         case ts.SyntaxKind.Parameter:
-            thisNode.text = "" + (<ts.ParameterDeclaration>node).name.getText(looseTs.getSourceFileOfNode(node));
+            thisNode.text = "param";
             break;
         case ts.SyntaxKind.VariableDeclaration:
             thisNode.text = "var decl";
