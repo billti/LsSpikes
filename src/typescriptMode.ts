@@ -209,6 +209,8 @@ function foo() {\n\
 
             var graph = buildTree(docSourceFile);
             myChart(graph, true /* recalc */);
+
+            var astGraph = buildAstFromNode(docSourceFile);
         }
 
         indexFromPos = function (line, ch) { return doc.indexFromPos({ line: line, ch: ch }); }

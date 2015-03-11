@@ -38,6 +38,66 @@ interface Graph {
     "children"?: Array<Graph>;
 }
 
+interface AstNode {
+    text: string;
+    width: number;
+    isLeaf: boolean;
+    kind: ts.SyntaxKind;
+    children: AstNode[];
+}
+
+function buildAstFromNode(node: ts.Node): AstNode {
+    // Set node defaults
+    var thisNode: AstNode = {
+        text: "", width: 0, isLeaf: true, kind: node.kind, children: null
+    };
+
+    var looseTs: any = ts; // HACK until internal.d.ts is fixed
+    switch (node.kind) {
+        case ts.SyntaxKind.SourceFile:
+            thisNode.text = (<ts.SourceFile>node).fileName;
+            break;
+        case ts.SyntaxKind.Block:
+            thisNode.text = "Block"
+            break;
+        case ts.SyntaxKind.ClassDeclaration:
+            thisNode.text = "Class " + (<ts.ClassDeclaration>node).name.text;
+            break;
+        case ts.SyntaxKind.Constructor:
+            thisNode.text = "constructor";
+            break;
+        case ts.SyntaxKind.FunctionDeclaration:
+            thisNode.text = "fn " + (<ts.FunctionDeclaration>node).name.text;
+            break;
+        case ts.SyntaxKind.FunctionExpression:
+            var name = (<ts.FunctionExpression>node).name && (<ts.FunctionExpression>node).name.text || "[anon]";
+            thisNode.text = "fn " + name;
+            break;
+        case ts.SyntaxKind.Parameter:
+            thisNode.text = "" + (<ts.ParameterDeclaration>node).name.getText(looseTs.getSourceFileOfNode(node));
+            break;
+        case ts.SyntaxKind.VariableDeclaration:
+            thisNode.text = "var " + (<ts.VariableDeclaration>node).name.getText(looseTs.getSourceFileOfNode(node));
+            break;
+        case ts.SyntaxKind.PropertyDeclaration:
+            thisNode.text = "Prop: " + (<ts.PropertyDeclaration>node).name.getText(looseTs.getSourceFileOfNode(node));
+        default:
+            //throw "Unrecognized token kind: " + node.kind;
+            console.log("Unrecognized token kind: " + eval("ts.SyntaxKind[node.kind]"));
+            break;
+    }
+
+    // Recurse for each child
+    ts.forEachChild(node, (childNode) => {
+        (thisNode.children || (thisNode.children = [])).push(buildAstFromNode(childNode));
+    })
+
+    thisNode.width = thisNode.text.length * 10;
+    if (thisNode.children) thisNode.isLeaf = false;
+
+    return thisNode;
+}
+
 function buildTree(node: ts.Node): Graph {
     var result: Graph = undefined;
     
