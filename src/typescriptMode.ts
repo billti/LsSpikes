@@ -4,6 +4,21 @@
 module tsls {
     export var version = "0.1";
 
+    var defaultText = `import {foo} from Foo;
+
+class Foo {
+    public age = 42;
+    constructor(public name: string){
+        try {
+        	const n = 10;
+            var x = (n) => \`n + 5 = \${n + 5 } \`;
+        } catch(e){
+            console.log(e);
+        }
+    }
+}
+`
+
     CodeMirror.defineMode("typescript", function (config, modeConfig) {
         var classMapping = {
             "text": null,
@@ -105,20 +120,7 @@ module tsls {
 
     var compilerOptions = ts.getDefaultCompilerOptions();
     var docName = "sample.ts";
-    var docText = "class Foo { \n\
-  public age = 42;\n\
-    constructor(public name: string){\n\
-    }\n\
-}\n\
-    \n\
-function foo() {\n\
-    if (true) {\n\
-        let x = null;\n\
-    }\n\
-    var y = function () {\n\
-        const name = \"test\";\n\
-    }\n\
-}";
+    var docText = defaultText;
     var docVersion = "1";
 
     var defaultLibName = "/TypeScript/lib.d.ts"

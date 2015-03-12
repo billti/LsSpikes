@@ -64,7 +64,8 @@ path.link {
 }
 
 .isLexical {
-    stroke: gray;
+    stroke: red;
+    stroke-width: 3px;
     stroke-dasharray: 10 5;
 }
 

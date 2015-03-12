@@ -9,20 +9,6 @@ declare var d3Graph: Function;
 
 var myEditor;
 var myChart: d3Parts.AstGraph;
-var defaultText = "class Foo { \
-  public age = 42;\
-  constructor(public name: string){\
-  }\
-}\
-\
-function foo(){\
-  if(true){\
-    let x = null;\
-  }\
-  var y = function(){\
-    const name = \"test\";\
-  }\
-}";
 
 window.addEventListener('load', function () {
     //myChart = d3Graph('#bindingGraph');
@@ -30,7 +16,7 @@ window.addEventListener('load', function () {
     myChart = new d3Parts.AstGraph(astGraph, 600, 600);
     var editorDiv = document.getElementById('editor');
     myEditor = CodeMirror(editorDiv, {
-        value: defaultText,
+        value: "// TODO: Write some TypeScript",
         mode: "typescript",
         extraKeys: { "Ctrl-Space": "autocomplete" },
         lineNumbers: true
@@ -101,9 +87,27 @@ function buildAstFromNode(node: ts.Node): AstNode {
             break;
         case ts.SyntaxKind.VariableDeclaration:
             thisNode.text = "var decl";
+            if (ts.isLet(node)) {
+                thisNode.text = "let decl";
+            }
+            if (ts.isConst(node)) {
+                thisNode.text = "const decl";
+            }
+            if (ts.isCatchClauseVariableDeclaration(<any>node)) {
+                thisNode.text = "catch decl";
+            }
             break;
         case ts.SyntaxKind.PropertyDeclaration:
             thisNode.text = "prop decl";
+            break;
+        case ts.SyntaxKind.PropertyAccessExpression:
+            thisNode.text = "prop access";
+            break;
+        case ts.SyntaxKind.CallExpression:
+            thisNode.text = "call expr";
+            break;
+        case ts.SyntaxKind.DotToken:
+            thisNode.text = "'.'";
             break;
         case ts.SyntaxKind.IfStatement:
             thisNode.text = "if";
@@ -113,6 +117,18 @@ function buildAstFromNode(node: ts.Node): AstNode {
             break;
         case ts.SyntaxKind.WhileStatement:
             thisNode.text = "while";
+            break;
+        case ts.SyntaxKind.TryStatement:
+            thisNode.text = "try";
+            break;
+        case ts.SyntaxKind.TryKeyword:
+            thisNode.text = "'try'";
+            break;
+        case ts.SyntaxKind.ThrowStatement:
+            thisNode.text = "throw";
+            break;
+        case ts.SyntaxKind.CatchClause:
+            thisNode.text = "catch";
             break;
         case ts.SyntaxKind.BreakStatement:
             thisNode.text = "break";
