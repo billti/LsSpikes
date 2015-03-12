@@ -196,15 +196,17 @@ class Foo {
     }
 
     var indexFromPos: (line: number, ch: number) => number;
+    var currDoc: CodeMirror.Doc;
+
     export function bindEditor(editor: CodeMirror.Editor) {
         elemTypeDOM = document.getElementById('elemType');
         elemDescDOM = document.getElementById('elemDesc');
-        var doc = editor.getDoc();
+        currDoc = editor.getDoc();
 
         function onChange(editor, change) {
             // Don't worry about incremental for now.  Just do a full update
             // Called on every key press when typing
-            var docText = doc.getValue();
+            var docText = currDoc.getValue();
             updateDoc(docText);	
 
             //var graph = buildTree(docSourceFile);
@@ -214,8 +216,14 @@ class Foo {
             myChart.render(astGraph);
         }
 
-        indexFromPos = function (line, ch) { return doc.indexFromPos({ line: line, ch: ch }); }
+        indexFromPos = function (line, ch) { return currDoc.indexFromPos({ line: line, ch: ch }); }
         editor.on('change', onChange);
-        doc.setValue(docText);
+        currDoc.setValue(docText);
+    }
+
+    export function highlightRegion(pos: number, end: number) {
+        var from = currDoc.posFromIndex(pos);
+        var to = currDoc.posFromIndex(end);
+        currDoc.setSelection(from, to);
     }
 }

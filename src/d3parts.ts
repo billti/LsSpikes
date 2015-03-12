@@ -58,6 +58,8 @@ module d3Parts {
                 .classed('isLexical',(d) => d.isLexicalScope)
                 .classed('isBlockScoped',(d) => d.isBlockScoped);
 
+            enterGroup.on('mouseover',(d) => tsls.highlightRegion(d.pos, d.end));
+
             enterGroup.append('text')
                 .attr('x', (d, i) => d.x + this.width / 2 )
                 .attr('y', (d, i) => d.y + 25 )

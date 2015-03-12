@@ -33,6 +33,8 @@ interface Graph {
 interface AstNode {
     id: number;
     text: string;
+    pos: number;
+    end: number;
     width: number;
     isLeaf: boolean;
     kind: ts.SyntaxKind;
@@ -46,7 +48,7 @@ var nodeId = 0;
 function buildAstFromNode(node: ts.Node): AstNode {
     // Set node defaults
     var thisNode: AstNode = {
-        id: ++nodeId, text: "", width: 0, isLeaf: true, kind: node.kind, children: null
+        id: ++nodeId, text: "", pos: node.pos, end: node.end, width: 0, isLeaf: true, kind: node.kind, children: null
     };
 
     var looseTs: any = ts; // HACK until internal.d.ts is fixed
