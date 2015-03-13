@@ -89,13 +89,13 @@ function buildAstFromNode(node: ts.Node): AstNode {
             break;
         case ts.SyntaxKind.VariableDeclaration:
             thisNode.text = "var decl";
-            if (ts.isLet(node)) {
+            if (looseTs.isLet(node)) {
                 thisNode.text = "let decl";
             }
-            if (ts.isConst(node)) {
+            if (looseTs.isConst(node)) {
                 thisNode.text = "const decl";
             }
-            if (ts.isCatchClauseVariableDeclaration(<any>node)) {
+            if (looseTs.isCatchClauseVariableDeclaration(<any>node)) {
                 thisNode.text = "catch decl";
             }
             break;
@@ -168,8 +168,8 @@ function buildAstFromNode(node: ts.Node): AstNode {
     thisNode.width = thisNode.text.length * 10;
 
     if (thisNode.children) thisNode.isLeaf = false;
-    if (ts.nodeStartsNewLexicalEnvironment(node)) thisNode.isLexicalScope = true;
-    if (ts.isBlockOrCatchScoped(<any>node)) thisNode.isBlockScoped = true;
+    if (looseTs.nodeStartsNewLexicalEnvironment(node)) thisNode.isLexicalScope = true;
+    if (looseTs.isBlockOrCatchScoped(<any>node)) thisNode.isBlockScoped = true;
 
     return thisNode;
 }
