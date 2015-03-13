@@ -1,5 +1,5 @@
 /// <reference path="codemirror.d.ts"/>
-/// <reference path="../TypeScript/built/local/typescriptServices.d.ts"/>
+/// <reference path="../TypeScript/typescriptServices.d.ts"/>
 
 module tsls {
     export var version = "0.1";

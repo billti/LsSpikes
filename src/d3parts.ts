@@ -1,5 +1,5 @@
 /// <reference path="d3.d.ts"/>
-/// <reference path="../TypeScript/built/local/typescriptServices.d.ts"/>
+/// <reference path="../TypeScript/typescriptServices.d.ts"/>
 
 module d3Parts {
     export interface AstNode {

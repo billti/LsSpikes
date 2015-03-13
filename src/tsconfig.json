@@ -3,7 +3,6 @@
         "outDir": "../build",
         "removeComments": false,
         "sourceMap": true,
-        "target": "es5",
-        "watch": true
+        "target": "es5"
     }
 }

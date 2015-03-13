@@ -1,8 +1,8 @@
 ﻿/// <reference path="d3parts.ts"/>
 /// <reference path="typescriptMode.ts"/>
-/// <reference path="../TypeScript/built/local/typescript.d.ts"/>
-/// <reference path="../TypeScript/built/local/typescriptServices.d.ts"/>
-/// <reference path="../TypeScript/built/local/typescript_internal.d.ts"/>
+/// <reference path="../TypeScript/typescript.d.ts"/>
+/// <reference path="../TypeScript/typescriptServices.d.ts"/>
+/// <reference path="../TypeScript/typescript_internal.d.ts"/>
 /// <reference path="codemirror.d.ts"/>
 
 declare var d3Graph: Function;
