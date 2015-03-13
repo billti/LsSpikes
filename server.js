@@ -11,7 +11,7 @@ app.use('/build', express.static('build'));
 app.use('/src', express.static('src'));
 
 // Serve TypeScript files directly from the local submodule build
-app.use('/typescript', express.static('TypeScript/built/local'));
+app.use('/typescript', express.static('TypeScript'));
 
 // Serve everything else out of the site folder
 app.use(express.static('site'));
