@@ -2,7 +2,7 @@ var express = require('express');
 var app = express();
 
 // Serve 3rd party libraries directly from bower directory
-app.use('/lib', express.static('bower_components'));
+app.use('/lib', express.static('node_modules'));
 
 // Serve compiled files directly from the build folder
 app.use('/build', express.static('build'));

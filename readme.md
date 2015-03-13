@@ -3,13 +3,7 @@
 
 This repo is for experimenting with various language service implementations.
 
-Install "bower", then run `npm install` and `bower install` to install the dev dependencies. e.g.
-
-```
-npm install -g bower
-npm install
-bower install
-```
+Run `npm install` to install the dev dependencies. e.g.
 
 To ensure the TypeScript submodule is sync'ed and up to date run `git submodule update`, then change into the TypeScript folder and ensure it's dependencies are installed and it is built locally by running `npm install` and `jake local`.
 

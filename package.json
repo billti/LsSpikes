@@ -17,6 +17,8 @@
   "bugs": "https://github.com/billti/LsSpikes/issues",
   "homepage": "https://github.com/billti/LsSpikes",
   "dependencies": {
+    "codemirror": "^5.0.0",
+    "d3": "^3.5.5",
     "express": "^4.12.1"
   },
   "devDependencies": {}
